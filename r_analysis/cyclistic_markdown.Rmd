@@ -1,0 +1,224 @@
+---
+title: "Cyclistic Bike-Share Case Study"
+author: "Samarth Gupta"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+fontsize: 11pt
+geometry: margin=1in
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8, fig.height = 4)
+
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(scales)
+library(kableExtra)
+
+options(scipen = 999)
+theme_set(theme_minimal(base_size = 13))
+```
+
+# Executive Summary
+
+This report analyzes how **casual riders** and **annual members** use Cyclistic bikes differently.
+
+Key insights include:
+
+-   Members take more total rides\
+-   Casual riders take longer rides\
+-   Casual demand spikes on weekends and in warmer months\
+-   Members show strong weekday commuting patterns
+
+------------------------------------------------------------------------
+
+# Business Task
+
+Identify how casual riders and annual members differ in behavior to guide membership conversion strategies.
+
+------------------------------------------------------------------------
+
+# Data Used
+
+Data from 12 months of Cyclistic trips was cleaned in an external R script.\
+This R Markdown loads the cleaned dataset for analysis.
+
+```{r load-data}
+df <- read_csv("Processed_data/cyclistic_cleaned.csv", show_col_types = FALSE)
+
+df <- df %>%
+  mutate(
+    day_of_week = wday(started_at, label = TRUE, abbr = TRUE),
+    month = factor(format(started_at, "%b"), levels = month.abb, ordered = TRUE)
+  )
+```
+
+------------------------------------------------------------------------
+
+# Data Cleaning Summary
+
+-   Combined 12 raw CSVs\
+-   Cleaned column names\
+-   Converted timestamps\
+-   Created ride_length in minutes\
+-   Removed negatives, zero-length, and extreme outliers\
+-   Removed duplicates\
+-   Added weekday/month features
+
+```{r glimpse}
+glimpse(df)
+```
+
+------------------------------------------------------------------------
+
+# Analysis & Visualizations
+
+Below are the major analyses.
+
+------------------------------------------------------------------------
+
+## Total Rides — Members vs Casual
+
+```{r ride-counts-plot, fig.cap="Total rides by user type"}
+ride_counts <- df %>%
+  count(member_casual) %>%
+  arrange(desc(n))
+
+ride_counts %>%
+  ggplot(aes(x = member_casual, y = n, fill = member_casual)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Total Rides: Members vs Casual Riders",
+    x = "User Type",
+    y = "Number of Rides"
+  )
+```
+
+```{r ride-counts-table}
+ride_counts %>%
+  mutate(n = comma(n)) %>%
+  kable(col.names = c("User Type","Total Rides"), align = c("l","r")) %>%
+  kable_styling(full_width = FALSE)
+```
+
+------------------------------------------------------------------------
+
+## Average Ride Length (Minutes)
+
+```{r avg-ride-plot, fig.cap="Average ride length by user type"}
+ride_length_summary <- df %>%
+  group_by(member_casual) %>%
+  summarise(
+    avg_ride = mean(ride_length, na.rm = TRUE),
+    median_ride = median(ride_length, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ride_length_summary %>%
+  ggplot(aes(x = member_casual, y = avg_ride, fill = member_casual)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Average Ride Length by User Type",
+    x = "User Type",
+    y = "Average Ride Length (mins)"
+  )
+```
+
+------------------------------------------------------------------------
+
+## Ride Length Distribution (0–60 mins)
+
+```{r dist-plot, fig.cap="Ride length distribution (0–60 minutes)"}
+df %>%
+  filter(ride_length <= 60) %>%
+  ggplot(aes(x = ride_length, fill = member_casual)) +
+  geom_histogram(bins = 50, alpha = 0.6, position = "identity") +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Ride Length Distribution (0–60 mins)",
+    x = "Ride Length (Minutes)",
+    y = "Count"
+  )
+```
+
+------------------------------------------------------------------------
+
+## Day of Week Usage
+
+```{r weekday-plot, fig.cap="Rides by day of week"}
+df %>%
+  count(member_casual, day_of_week) %>%
+  ggplot(aes(x = day_of_week, y = n, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Rides by Day of Week",
+    x = "Day of Week",
+    y = "Total Rides"
+  )
+```
+
+------------------------------------------------------------------------
+
+## Monthly Trends
+
+```{r month-plot, fig.cap="Monthly ride counts"}
+df %>%
+  count(member_casual, month) %>%
+  ggplot(aes(x = month, y = n, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Rides by Month",
+    x = "Month",
+    y = "Ride Count"
+  )
+```
+
+------------------------------------------------------------------------
+
+## Top 10 Start Stations
+
+```{r top-stations-plot, fig.cap="Top 10 most popular start stations"}
+top_stations <- df %>%
+  filter(!is.na(start_station_name) & start_station_name != "") %>%
+  count(start_station_name, sort = TRUE) %>%
+  slice_head(n = 10)
+
+top_stations %>%
+  ggplot(aes(x = reorder(start_station_name, n), y = n)) +
+  geom_col(fill = "#69b3a2") +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Top 10 Most Popular Start Stations",
+    x = "Station Name",
+    y = "Number of Rides"
+  )
+```
+
+------------------------------------------------------------------------
+
+# Recommendations
+
+1.  Convert weekend casual users with short-term membership offers.\
+2.  Run promotional campaigns at top tourist-heavy stations.\
+3.  Offer discounted first-month passes during summer peaks.\
+4.  Target commuters at weekday hotspots.
+
+------------------------------------------------------------------------
+
+# Appendix
+
+Details on R environment used:
+
+```{r session-info}
+sessionInfo()
+```
