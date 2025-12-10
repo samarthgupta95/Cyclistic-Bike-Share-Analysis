@@ -12,27 +12,30 @@ The workflow follows the Google Data Analytics framework:
 
 ---
 
-## 📁 Repository Structure  
+## 📁 Repository Structure
+
+```
 Cyclistic-Bike-Share-Analysis/
 │
 ├── r_analysis/
-│ ├── cyclistic_analysis.R
-│ ├── cyclistic_markdown.Rmd
-│ └── cyclistic_markdown.html
+│   ├── cyclistic_analysis.R
+│   ├── cyclistic_markdown.Rmd
+│   └── cyclistic_markdown.html
 │
 ├── sql_scripts/
-│ ├── 01_data_prep.sql
-│ ├── 02_data_validation.sql
-│ ├── 03_transform_and_clean.sql
-│ └── 04_analysis_and_insights.sql
+│   ├── 01_data_prep.sql
+│   ├── 02_data_validation.sql
+│   ├── 03_transform_and_clean.sql
+│   └── 04_analysis_and_insights.sql
 │
 ├── tableau_dashboard/
-│ ├── Cyclistic_Dashboard.mp4 # Dashboard walkthrough video
-│ ├── screenshots/ # Dashboard visuals
+│   ├── Cyclistic_Dashboard.mp4   # Dashboard walkthrough video
+│   └── screenshots/              # Dashboard visuals
 │
-├── Cyclistic Bike-Share Analysis.pptx # Full presentation (uploaded directly)
+├── Cyclistic Bike-Share Analysis.pptx   # Full presentation (uploaded directly)
 │
 └── README.md
+```
 
 ---
 
@@ -86,7 +89,8 @@ Important columns include:
 
 ---
 
-## 📊 ANALYZE  
+## 📊 ANALYZE
+
 ### Behavior Insights
 - Casual riders take **longer rides** but **ride less frequently**  
 - Members ride **short, consistent, commute-based trips**  
@@ -94,14 +98,15 @@ Important columns include:
 - Weekday AM/PM spikes indicate member commuters  
 
 ### Bike Type Usage
-- Casual riders prefer **electric & classic** bikes  
-- Members heavily use **docked bikes**  
+- Casual riders show higher average ride durations on both **classic** and **electric** bikes  
+- Members use both bike types for **shorter, faster trips**, consistent with commuting behavior  
 
 ### Temporal Patterns
 - Casual use peaks in **summer weekends**  
 - Member activity aligns with **work routines**
 
 All SQL queries and analysis scripts are provided in the `sql_scripts` and `r_analysis` folders.
+
 
 ---
 
@@ -149,7 +154,7 @@ Due to the dataset’s large size (~400MB), Excel files are stored externally vi
 
 ## 🛠 Technical Stack  
 **Languages:** SQL (PostgreSQL), R  
-**Tools:** Excel (Power Query), Tableau, GitHub, PowerPoint  
+**Tools:** Excel (Power Query), RStudio, Tableau, PowerPoint  
 **Skills Demonstrated:**  
 - Data wrangling & cleaning  
 - Working with large datasets  
