@@ -81,7 +81,7 @@ Important columns include:
 
 ### **Data Cleaning Steps**
 - Removed missing/invalid station IDs, coordinates, and blank entries  
-- Excluded rides with negative duration or durations > 24 hours  
+- Excluded rides with negative duration or duartions < 1 minute and durations > 24 hours  
 - Created fields: `ride_length`, `day_of_week`, `month`  
 - Validated primary key uniqueness (ride_id)  
 - Ensured timestamp consistency  
@@ -153,8 +153,8 @@ Due to the dataset’s large size (~400MB), Excel files are stored externally vi
 ---
 
 ## 🛠 Technical Stack  
-**Languages:** SQL (PostgreSQL), R  
-**Tools:** Excel (Power Query), RStudio, Tableau, PowerPoint  
+**Languages:** SQL, R  
+**Tools:** Excel (Power Query), PostgreSQL, RStudio, Tableau, PowerPoint  
 **Skills Demonstrated:**  
 - Data wrangling & cleaning  
 - Working with large datasets  
@@ -174,6 +174,5 @@ This repository documents a complete, end-to-end analytics pipeline:
 - A full presentation deck  
 - Actionable recommendations fully aligned with business needs
 
-This project demonstrates both **technical competence** and **professional communication**, making it suitable for analytics, BI, and consulting roles.
 
 ---
