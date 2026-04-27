@@ -32,7 +32,7 @@ Cyclistic-Bike-Share-Analysis/
 │   ├── Cyclistic_Dashboard.mp4   # Dashboard walkthrough video
 │   └── screenshots/              # Dashboard visuals
 │
-├── Cyclistic Bike-Share Analysis.pptx   # Full presentation (uploaded directly)
+├── Cyclistic Bike-Share Analysis.pdf   # Full presentation (uploaded directly)
 │
 └── README.md
 ```
